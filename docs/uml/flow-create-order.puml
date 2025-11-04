@@ -1,0 +1,37 @@
+@startuml
+' Flow: Create Order via embedded OrderFormControl overlay
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam SequenceLifeLineBorderColor #555555
+
+actor User
+participant MainWindow
+participant OrderFormControl
+participant MainWindowViewModel as VM
+participant DatabaseService as DB
+database SQLServer as SQL
+
+User -> MainWindow: Click "New Order"
+MainWindow -> MainWindow: Create new Order instance
+MainWindow -> OrderFormControl: Instantiate + SetOrder(order)
+MainWindow -> MainWindow: Show overlay with OrderFormControl
+
+User -> OrderFormControl: Fill customer + items
+User -> OrderFormControl: Click "Create Order"
+OrderFormControl -> MainWindow: Saved(order)
+
+MainWindow -> DB: CreateOrderAsync(order)
+DB -> SQL: INSERT Orders
+SQL --> DB: OrderId
+DB -> SQL: INSERT OrderItems (loop over items)
+SQL --> DB: OK
+DB --> MainWindow: OrderId
+
+MainWindow -> VM: Orders.Insert(0, order)
+MainWindow -> VM: SelectedOrder = order
+MainWindow -> VM: StatusMessage = "Order created successfully"
+MainWindow -> MainWindow: Hide overlay
+
+@enduml

@@ -1,0 +1,47 @@
+# .NET / Avalonia / C#
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.db
+*.ide
+*.cache/
+*.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS / JetBrains
+.vs/
+.idea/
+*.iml
+
+# Rider
+.rider/
+
+# VSCode
+.vscode/
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Avalonia generated
+**/ref/
+**/refint/
+**/Avalonia/
+
+# Packages
+*.nupkg
+packages/
+
+# Environment
+.env
+secrets.json
+
+# PlantUML outputs
+docs/uml/*.png
+docs/uml/*.svg

@@ -1,0 +1,101 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="CoffeeShopManagement.App">
+    <Application.Resources>
+        <!-- Linear gradient with the requested colors: #53EAFD, #51A2FF, #00D5BE -->
+        <LinearGradientBrush x:Key="PrimaryLinearGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF53EAFD" Offset="0"/>
+            <GradientStop Color="#FF51A2FF" Offset="0.5"/>
+            <GradientStop Color="#FF00D5BE" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- Liquid glass (frosted) brushes inspired by macOS Tahoe -->
+        <LinearGradientBrush x:Key="LiquidGlassBackground" StartPoint="0,0" EndPoint="1,1">
+            <!-- semi-transparent stops for the frosted look -->
+            <GradientStop Color="#4D53EAFD" Offset="0"/>
+            <GradientStop Color="#3F51A2FF" Offset="0.5"/>
+            <GradientStop Color="#2F00D5BE" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- subtle inner highlight to mimic light scattering on glass -->
+        <LinearGradientBrush x:Key="LiquidGlassHighlight" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#40FFFFFF" Offset="0"/>
+            <GradientStop Color="#00FFFFFF" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="LiquidGlassBorderBrush" Color="#40FFFFFF"/>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        
+        <!-- Liquid Glass Custom Styles -->
+        <Style Selector="Window">
+            <Setter Property="Background" Value="{StaticResource PrimaryLinearGradient}"/>
+            <Setter Property="TransparencyBackgroundFallback" Value="#F0F8FF"/>
+            <!-- Prefer Kantumruy for Khmer text, fall back to Inter for other scripts -->
+            <Setter Property="FontFamily" Value="Kantumruy, Inter"/>
+        </Style>
+        
+        <Style Selector="Border.liquid-glass">
+            <!-- Use the frosted gradient with translucency to emulate Tahoe glass -->
+            <Setter Property="Background" Value="{StaticResource LiquidGlassBackground}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource LiquidGlassBorderBrush}"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <!-- Slight inner sheen handled by background alpha/gradient -->
+            <!-- Stronger, softer shadow for elevation similar to macOS -->
+            <Setter Property="BoxShadow" Value="0 16 48 #1A000000"/>
+        </Style>
+        
+        <Style Selector="Button.liquid-button">
+            <!-- Buttons sit on top of the frosted glass, use a translucent fill to let the glass show through -->
+            <Setter Property="Background" Value="#33FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#60FFFFFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Foreground" Value="#0F2430"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <!-- subtle shadow handled on container borders only -->
+        </Style>
+        
+        <Style Selector="Button.liquid-button:pointerover">
+            <Setter Property="Background" Value="#55FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#80FFFFFF"/>
+            
+        </Style>
+        
+        <Style Selector="TextBox.liquid-input">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#30FFFFFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Foreground" Value="#0F2430"/>
+            <Setter Property="FontSize" Value="14"/>
+            
+        </Style>
+        
+        <Style Selector="ListBox.liquid-list">
+            <Setter Property="Background" Value="#14FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            
+        </Style>
+        
+        <Style Selector="TextBlock.title">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2C3E50"/>
+        </Style>
+        
+        <Style Selector="TextBlock.subtitle">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#34495E"/>
+        </Style>
+    </Application.Styles>
+</Application>

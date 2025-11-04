@@ -1,0 +1,25 @@
+
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: coffee_shop_sql
+    platform: linux/amd64        # ✅ បន្ថែមសម្រាប់ Mac M1/M2
+    environment:
+      SA_PASSWORD: "YourPassword123!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1435:1433"              # ✅ ប្រើ port 1435 ជៀសវាងជាមួយ SQL ផ្សេង
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./Database/Scripts:/scripts
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourPassword123! -Q 'SELECT 1' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  sql_data:

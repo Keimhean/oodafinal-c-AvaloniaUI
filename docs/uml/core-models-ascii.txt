@@ -1,0 +1,83 @@
+ASCII UML - Core classes
+
+Product
++-------------------------------+
+| Product                       |
+|-------------------------------|
+| - ProductId:int               |
+| - Name:string                 |
+| - Description:string          |
+| - Price:decimal               |
+| - StockQuantity:int           |
+| - Category:string             |
+| - IsAvailable:bool            |
+|-------------------------------|
+| + StockStatus():string        |
++-------------------------------+
+
+OrderItem
++-------------------------------+
+| OrderItem                     |
+|-------------------------------|
+| - OrderItemId:int             |
+| - ProductId:int               |
+| - ProductName:string          |
+| - Quantity:int                |
+| - UnitPrice:decimal           |
+|-------------------------------|
+| + Subtotal():decimal          |
++-------------------------------+
+
+Order
++-------------------------------+
+| Order                         |
+|-------------------------------|
+| - OrderId:int                 |
+| - OrderDate:DateTime          |
+| - Status:string               |
+| - TotalAmount:decimal         |
+| - CustomerName:string         |
+| - Items: ObservableCollection |
+|-------------------------------|
+| + AddItem(item)               |
+| + RemoveItem(item)            |
+| + RecalculateTotal()          |
++-------------------------------+
+
+DatabaseService
++-------------------------------+
+| DatabaseService               |
+|-------------------------------|
+| - _connectionString:string    |
+|-------------------------------|
+| + InitializeDatabaseAsync()   |
+| + GetProductsAsync()          |
+| + SearchProductsAsync(term)   |
+| + AddProductAsync(p)          |
+| + UpdateProductAsync(p)       |
+| + DeleteProductAsync(id)      |
+| + CreateOrderAsync(order)     |
++-------------------------------+
+
+MainWindowViewModel
++-------------------------------+
+| MainWindowViewModel           |
+|-------------------------------|
+| - _databaseService            |
+| + Products: ObservableColl    |
+| + Orders: ObservableColl      |
+| + SelectedProduct             |
+| + SearchText                  |
+|-------------------------------|
+| + LoadDataCommand()           |
+| + SearchProductsCommand()     |
+| + AddProductCommand()         |
+| + UpdateProductCommand()      |
+| + DeleteProductCommand()      |
++-------------------------------+
+
+Relations
+- Order 1..* OrderItem
+- Product referenced by OrderItem
+- MainWindowViewModel uses DatabaseService
+- MainWindow hosts OrderFormControl and NotificationControl

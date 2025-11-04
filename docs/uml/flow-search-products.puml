@@ -1,0 +1,34 @@
+@startuml
+' Flow: Search Products from MainWindow
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam ArrowColor #333333
+skinparam SequenceLifeLineBorderColor #555555
+
+actor User
+participant MainWindow
+participant MainWindowViewModel as VM
+participant DatabaseService as DB
+database SQLServer as SQL
+
+User -> MainWindow: Type in SearchText
+User -> MainWindow: Click "Search"
+MainWindow -> VM: SearchProductsCommand.Execute()
+VM -> VM: Validate SearchText (empty? then LoadData)
+alt SearchText is not empty
+  VM -> DB: SearchProductsAsync(SearchText)
+  DB -> SQL: SELECT ... WHERE Name LIKE @term OR Description LIKE @term OR Category LIKE @term
+  SQL --> DB: rows
+  DB --> VM: List<Product>
+  VM -> VM: Products.Clear(); Add each product
+  VM -> MainWindow: Update bindings (Products)
+else SearchText empty
+  VM -> DB: GetProductsAsync()
+  DB -> SQL: SELECT * FROM Products ORDER BY Name
+  SQL --> DB: rows
+  DB --> VM: List<Product>
+  VM -> VM: Products.Clear(); Add each product
+end
+VM -> MainWindow: StatusMessage update
+@enduml

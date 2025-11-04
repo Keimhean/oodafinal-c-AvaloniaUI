@@ -1,0 +1,92 @@
+@startuml
+' CoffeeShopManagement core models and relationships
+
+package "Models" {
+  class Product {
+    +int ProductId
+    +string Name
+    +string Description
+    +decimal Price
+    +int StockQuantity
+    +string Category
+    +bool IsAvailable
+    +string StockStatus()
+  }
+
+  class OrderItem {
+    +int OrderItemId
+    +int ProductId
+    +string ProductName
+    +int Quantity
+    +decimal UnitPrice
+    +decimal Subtotal()
+  }
+
+  class Order {
+    +int OrderId
+    +DateTime OrderDate
+    +string Status
+    +decimal TotalAmount
+    +string CustomerName
+    +ObservableCollection~OrderItem~ Items
+    +void AddItem(OrderItem)
+    +void RemoveItem(OrderItem)
+    +void RecalculateTotal()
+  }
+
+  class Category {
+    +int CategoryId
+    +string Name
+    +string Description
+  }
+}
+
+package "Services" {
+  class DatabaseService {
+    -string _connectionString
+    +Task InitializeDatabaseAsync()
+    +Task<List~Product~> GetProductsAsync()
+    +Task<int> AddProductAsync(Product)
+    +Task<bool> UpdateProductAsync(Product)
+    +Task<bool> DeleteProductAsync(int productId)
+    +Task<List~Product~> SearchProductsAsync(string)
+    +Task<int> CreateOrderAsync(Order)
+  }
+}
+
+package "ViewModels" {
+  abstract class ViewModelBase <<abstract>>
+  class MainWindowViewModel {
+    -DatabaseService _databaseService
+    +ObservableCollection~Product~ Products
+    +ObservableCollection~Order~ Orders
+    +Product SelectedProduct
+    +string SearchText
+    +RelayCommand AddProductCommand()
+    +RelayCommand UpdateProductCommand()
+    +RelayCommand DeleteProductCommand()
+    +RelayCommand SearchProductsCommand()
+    +RelayCommand LoadDataCommand()
+    +Task InitializeAsync()
+  }
+}
+
+package "Views" {
+  class MainWindow
+  class OrderFormControl
+  class ProductForm
+  class NotificationControl
+}
+
+' Relations
+Product "1" -- "*" OrderItem : referencedBy
+Order "1" -- "*" OrderItem : contains
+MainWindowViewModel o-- DatabaseService : uses
+MainWindowViewModel --> Product : selectedProduct
+MainWindow "1" *-- "1" MainWindowViewModel : DataContext
+MainWindow *-- OrderFormControl : hosts
+MainWindow *-- NotificationControl : hosts
+DatabaseService ..> Product : mapsTo
+DatabaseService ..> Order : mapsTo
+
+@enduml

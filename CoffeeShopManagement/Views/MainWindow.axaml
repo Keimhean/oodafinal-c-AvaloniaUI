@@ -1,0 +1,142 @@
+<Window xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:CoffeeShopManagement.ViewModels"
+    xmlns:local="using:CoffeeShopManagement.Views"
+    xmlns:converters="using:CoffeeShopManagement.Converters"
+    x:Class="CoffeeShopManagement.Views.MainWindow"
+    Title="ប្រព័ន្ធគ្រប់គ្រងហាងកាហ្វេ"
+    Width="1200" Height="800"
+    TransparencyLevelHint="AcrylicBlur"
+    Icon="avares://CoffeeShopManagement/Assets/avalonia-logo.ico"
+    Background="{StaticResource PrimaryLinearGradient}">
+
+    <Window.Resources>
+        <converters:StringToColorConverter x:Key="StringToColorConverter"/>
+    </Window.Resources>
+    
+    <!-- DataContext is provided by DI in App.OnFrameworkInitializationCompleted when MainWindow is created.
+         Removing the XAML-instantiated ViewModel avoids requiring a public parameterless constructor. -->
+    
+    <Border Classes="liquid-glass" Margin="20" Padding="20">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Classes="liquid-glass" Margin="0,0,0,20" Padding="20">
+                <StackPanel Orientation="Horizontal" Spacing="20">
+                    <TextBlock Text="☕ ប្រព័ន្ធគ្រប់គ្រងហាងកាហ្វេ" Classes="title"/>
+                    <Border Background="{StaticResource PrimaryLinearGradient}" CornerRadius="8" Padding="10,5" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="#2C3E50" FontWeight="SemiBold"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,*" RowDefinitions="Auto,*">
+                
+                <!-- Search and Controls -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="10" Margin="0,0,0,20">
+                    <TextBox Text="{Binding SearchText}" 
+                             Watermark="Search products..." 
+                             Classes="liquid-input" 
+                             Width="300"/>
+                    <Button Content="Search" Command="{Binding SearchProductsCommand}" Classes="liquid-button"/>
+                    <Button Content="Add Product" Command="{Binding AddProductCommand}" Classes="liquid-button"/>
+                    <Button Content="Update Product" Command="{Binding UpdateProductCommand}" Classes="liquid-button"/>
+                    <Button Content="Delete Product" Command="{Binding DeleteProductCommand}" Classes="liquid-button"/>
+                    <Button Content="Refresh" Command="{Binding LoadDataCommand}" Classes="liquid-button"/>
+                    <Button Content="New Order" Click="NewOrder_ShowEmbedded_Click" Classes="liquid-button"/>
+                </StackPanel>
+
+                <!-- Products Section -->
+                <Border Grid.Row="1" Grid.Column="0" Classes="liquid-glass" Margin="0,0,10,0" Padding="15">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text=" Products List" Classes="subtitle" Grid.Row="0" Margin="0,0,0,10"/>
+                        <ListBox ItemsSource="{Binding Products}" 
+                                 SelectedItem="{Binding SelectedProduct}"
+                                 Classes="liquid-list" 
+                                 Grid.Row="1">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10" Margin="2" Background="{StaticResource PrimaryLinearGradient}" CornerRadius="8">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding Price, StringFormat='${0:F2}'}" 
+                                                       Foreground="#27AE60" 
+                                                       FontWeight="SemiBold" 
+                                                       Grid.Row="0" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding Category}" 
+                                                       Foreground="#7F8C8D" 
+                                                       Grid.Row="1" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding StockStatus}" 
+                                                       Foreground="{Binding StockStatus, Converter={StaticResource StringToColorConverter}}"
+                                                       Grid.Row="1" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding Description}" 
+                                                       Foreground="#95A5A6" 
+                                                       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                                                       TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+
+                <!-- Orders Section -->
+                <Border Grid.Row="1" Grid.Column="1" Classes="liquid-glass" Margin="10,0,0,0" Padding="15">
+                    <Grid RowDefinitions="Auto,*">
+                        <TextBlock Text=" Recent Orders" Classes="subtitle" Grid.Row="0" Margin="0,0,0,10"/>
+                        <ListBox ItemsSource="{Binding Orders}" 
+                                 SelectedItem="{Binding SelectedOrder}"
+                                 Classes="liquid-list" 
+                                 Grid.Row="1">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10" Margin="2" Background="{StaticResource PrimaryLinearGradient}" CornerRadius="8">
+                                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                            <TextBlock Text="{Binding CustomerName}" FontWeight="Bold" Grid.Row="0" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding TotalAmount, StringFormat='${0:F2}'}" 
+                                                       Foreground="#E74C3C" 
+                                                       FontWeight="SemiBold" 
+                                                       Grid.Row="0" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding OrderDate, StringFormat='{}{0:MMM dd, yyyy HH:mm}'}" 
+                                                       Foreground="#7F8C8D" 
+                                                       Grid.Row="1" Grid.Column="0"/>
+                                            <TextBlock Text="{Binding Status}" 
+                                                       Foreground="{Binding Status, Converter={StaticResource StringToColorConverter}}"
+                                                       Grid.Row="1" Grid.Column="1"/>
+                                            <TextBlock Text="{Binding Items.Count, StringFormat='{}{0} items'}" 
+                                                       Foreground="#95A5A6" 
+                                                       Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Footer -->
+            <Border Grid.Row="2" Classes="liquid-glass" Margin="0,20,0,0" Padding="15">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Text="☕ Made with ❤️ for Coffee Lovers" Foreground="#7F8C8D" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Products.Count, StringFormat='Total Products: {0}'}" 
+                               Foreground="#7F8C8D" 
+                               Grid.Column="1"/>
+                </Grid>
+            </Border>
+
+            <!-- Loading Overlay (temporarily removed to diagnose AVLN2000) -->
+            <!-- Embedded OrderForm overlay -->
+            <Grid x:Name="OrderOverlay" IsVisible="False" Background="#80000000" Grid.RowSpan="3">
+                <ContentControl x:Name="OrderHost" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
