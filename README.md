@@ -14,7 +14,7 @@
 
 - របៀបដំណើរការ (សង្ខេប):
   1) ចាប់ផ្តើម DB: `docker-compose up -d`
-  2) រត់អ'app':
+  2) run'app':
      - `cd CoffeeShopManagement`
      - `dotnet run`
 
