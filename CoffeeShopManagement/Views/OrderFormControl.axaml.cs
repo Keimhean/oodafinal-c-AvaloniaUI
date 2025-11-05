@@ -42,13 +42,15 @@ namespace CoffeeShopManagement.Views
         {
             if (string.IsNullOrWhiteSpace(Order.CustomerName))
             {
-                _ = MessageBox.Show((Window?)this.GetVisualRoot() as Window, "Please enter a customer name", "Validation Error", new[] { "OK" });
+                var owner = this.FindAncestorOfType<Window>() ?? (this.VisualRoot as Window);
+                _ = MessageBox.Show(owner, "Please enter a customer name", "Validation Error", new[] { "OK" });
                 return false;
             }
 
             if (Order.Items.Count == 0)
             {
-                _ = MessageBox.Show((Window?)this.GetVisualRoot() as Window, "Please add at least one item to the order", "Validation Error", new[] { "OK" });
+                var owner = this.FindAncestorOfType<Window>() ?? (this.VisualRoot as Window);
+                _ = MessageBox.Show(owner, "Please add at least one item to the order", "Validation Error", new[] { "OK" });
                 return false;
             }
 
