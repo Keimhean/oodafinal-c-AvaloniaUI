@@ -1,0 +1,24 @@
+# Normalize line endings in text files
+* text=auto
+
+# Enforce LF for source files (common on macOS/Linux)
+*.cs text eol=lf
+*.csproj text eol=lf
+*.sln text eol=lf
+*.axaml text eol=lf
+*.xaml text eol=lf
+*.xml text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.puml text eol=lf
+
+# Treat Avalonia XAML as XML for diffs/highlighting on GitHub
+*.axaml linguist-language=XML
+
+# Keep images as binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
